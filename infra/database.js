@@ -7,6 +7,7 @@ async function query (queryObject) {
     user: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DB,
+    ssl: process.env.NODE_ENV === "production" ? true : false
   });
   
 
@@ -40,8 +41,7 @@ export default {
       text: `
         SELECT count(*)::int AS total
         FROM pg_stat_activity
-        WHERE backend_type = 'client backend'
-        AND datname = $1;
+        WHERE datname = $1;
       `,
       values: [databaseName]
     });
