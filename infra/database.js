@@ -1,18 +1,11 @@
-import { Client } from "pg"
+import { Client } from "pg";
+import migrationRunner from 'node-pg-migrate';
+import { join } from "node:path";
 
 async function query (queryObject) {
-  const client = new Client({
-    host: process.env.POSTGRES_HOST || 'localhost',
-    port: process.env.POSTGRES_PORT || 5432,
-    user: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    database: process.env.POSTGRES_DB,
-    ssl: getSSLValues()
-  });
-  
+  let client = await getNewClient();
 
   try {
-    await client.connect();
     const result = await client.query(queryObject);
     return result;
   } catch (error) {
@@ -24,7 +17,7 @@ async function query (queryObject) {
 }
 
 export default {
-  query: query,
+  query,
   getPostgresVersion: async () => {
     const result = await query("SELECT version();");
     return result.rows[0].version;
@@ -48,7 +41,35 @@ export default {
 
 
     return parseInt(result.rows[0].total);
-  }
+  },
+  runMigrations: async (dryRun = true) => {
+    const dbClient = await getNewClient();
+    const result = await migrationRunner({
+      databaseUrl: process.env.DATABASE_URL,
+      dryRun: dryRun,
+      dir: join('infra', 'migrations'),
+      direction: 'up',
+      migrationsTable: 'pgmigrations',
+      client: dbClient
+    });
+    await dbClient.end();
+    return result;
+  },
+  getNewClient
+}
+
+async function getNewClient() {
+  const client = new Client({
+    host: process.env.POSTGRES_HOST || 'localhost',
+    port: process.env.POSTGRES_PORT || 5432,
+    user: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DB,
+    ssl: getSSLValues()
+  });
+
+  await client.connect();
+  return client;
 }
 
 function getSSLValues() {
@@ -58,5 +79,5 @@ function getSSLValues() {
     };
   }
 
-  return process.env.NODE_ENV === "development" ? false : true;
+  return process.env.NODE_ENV === "production" ? true : false;
 }
