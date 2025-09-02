@@ -1,6 +1,7 @@
 import { Client } from "pg";
 import migrationRunner from 'node-pg-migrate';
-import { join } from "node:path";
+import { join, resolve } from "node:path";
+import { existsSync } from "node:fs";
 
 async function query (queryObject) {
   let client = await getNewClient();
@@ -49,7 +50,7 @@ export default {
       ? resolve(process.cwd(), "infra", "migrations")
       : join("infra", "migrations");
 
-    if (!migrationsDir) {
+    if (!existsSync(migrationsDir)) {
       throw new Error(`Migrations dir not found: ${migrationsDir}`);
     }
 
