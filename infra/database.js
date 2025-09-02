@@ -44,10 +44,19 @@ export default {
   },
   runMigrations: async (dryRun = true) => {
     const dbClient = await getNewClient();
+
+    const migrationsDir = process.env.NODE_ENV === "production"
+      ? resolve(process.cwd(), "infra", "migrations")
+      : join("infra", "migrations");
+
+    if (!migrationsDir) {
+      throw new Error(`Migrations dir not found: ${migrationsDir}`);
+    }
+
     const result = await migrationRunner({
       databaseUrl: process.env.DATABASE_URL,
       dryRun: dryRun,
-      dir: join('infra', 'migrations'),
+      dir: migrationsDir,
       direction: 'up',
       migrationsTable: 'pgmigrations',
       client: dbClient
