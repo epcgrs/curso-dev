@@ -9,9 +9,9 @@ export default async function migrations(request, response) {
   }
 
   if (request.method === 'GET') {
-    await migrationGet(request, response);
+    return await migrationGet(request, response);
   } else if (request.method === 'POST') {
-    await migrationPost(request, response);
+    return await migrationPost(request, response);
   }
 
 }
