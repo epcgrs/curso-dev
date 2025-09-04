@@ -26,6 +26,7 @@ export default [
       {
         files: ["tests/**/*.{js,jsx,ts,tsx}"],
         env: { jest: true, node: true },
+        rules: { "no-console": "off" },
       },
       { files: ["infra/**/*.{js,ts}"], env: { node: true } },
     ],
