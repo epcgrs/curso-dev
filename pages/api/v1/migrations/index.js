@@ -3,14 +3,14 @@ import database from 'infra/database.js';
 export default async function migrations(request, response) {
 
   if (request.method !== 'GET' && request.method !== 'POST') {
-    response.setHeader("Content-Type", "application/json");
     response.setHeader("Allow", ["GET", "POST"]);
-    response.status(405).end(`Method ${request.method} Not Allowed`);
+    return response.status(405).end(`Method ${request.method} Not Allowed`);
   }
 
   if (request.method === 'GET') {
     return await migrationGet(request, response);
-  } else if (request.method === 'POST') {
+  }
+  if (request.method === 'POST') {
     return await migrationPost(request, response);
   }
 
