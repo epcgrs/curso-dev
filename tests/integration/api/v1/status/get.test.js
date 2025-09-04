@@ -16,14 +16,15 @@ test("GET to /api/v1/status should return 200", async () => {
 
   expect(responseBody.postgress_version).toBeDefined();
   expect(responseBody.postgress_version).toMatch(/PostgreSQL/);
-  expect(typeof responseBody.postgress_version).toBe('string');
+  expect(typeof responseBody.postgress_version).toBe("string");
 
   expect(responseBody.max_connections).toBeDefined();
-  expect(typeof responseBody.max_connections).toBe('number');
+  expect(typeof responseBody.max_connections).toBe("number");
   expect(responseBody.max_connections).toBeGreaterThan(0);
 
   expect(responseBody.used_connections).toBeDefined();
-  expect(typeof responseBody.used_connections).toBe('number');
-  expect(responseBody.used_connections).toBeLessThanOrEqual(responseBody.max_connections);
-
+  expect(typeof responseBody.used_connections).toBe("number");
+  expect(responseBody.used_connections).toBeLessThanOrEqual(
+    responseBody.max_connections,
+  );
 });

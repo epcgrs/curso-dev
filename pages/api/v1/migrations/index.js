@@ -1,37 +1,37 @@
-import database from 'infra/database.js';
+import database from "infra/database.js";
 
 export default async function migrations(request, response) {
-
-  if (request.method !== 'GET' && request.method !== 'POST') {
+  if (request.method !== "GET" && request.method !== "POST") {
     response.setHeader("Allow", ["GET", "POST"]);
     return response.status(405).end(`Method ${request.method} Not Allowed`);
   }
 
-  if (request.method === 'GET') {
+  if (request.method === "GET") {
     return await migrationGet(request, response);
   }
-  if (request.method === 'POST') {
+  if (request.method === "POST") {
     return await migrationPost(request, response);
   }
-
 }
 
 async function migrationGet(request, response) {
   try {
     const migrations = await database.runMigrations();
-    
+
     if (migrations.length > 0) {
       response.status(201).json({
         status: "success",
-        data: migrations
+        data: migrations,
       });
     }
     response.status(200).json({
       status: "success",
-      data: []
+      data: [],
     });
   } catch (error) {
-    response.status(500).json({ error: "Internal Server Error", details: error.message });
+    response
+      .status(500)
+      .json({ error: "Internal Server Error", details: error.message });
   }
 }
 
@@ -42,15 +42,17 @@ async function migrationPost(request, response) {
     if (migratedMigrations.length > 0) {
       response.status(201).json({
         status: "success",
-        data: migratedMigrations
+        data: migratedMigrations,
       });
-    } 
-    
+    }
+
     response.status(200).json({
       status: "success",
-      data: []
+      data: [],
     });
   } catch (error) {
-    response.status(500).json({ error: "Internal Server Error", details: error.message });
+    response
+      .status(500)
+      .json({ error: "Internal Server Error", details: error.message });
   }
 }
