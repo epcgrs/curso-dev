@@ -8,10 +8,10 @@ export default async function migrations(request, response) {
   }
 
   if (request.method === 'GET') {
-    return migrationGet(request, response);
+    return await migrationGet(request, response);
   }
   if (request.method === 'POST') {
-    return migrationPost(request, response);
+    return await migrationPost(request, response);
   }
 
 }
