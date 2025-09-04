@@ -17,7 +17,7 @@ async function query(queryObject) {
   }
 }
 
-export default {
+const databaseUtils = {
   query,
   getPostgresVersion: async () => {
     const result = await query("SELECT version();");
@@ -66,6 +66,8 @@ export default {
   },
   getNewClient,
 };
+
+export default databaseUtils;
 
 async function getNewClient() {
   const client = new Client({

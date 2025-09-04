@@ -4,7 +4,7 @@ import path from "node:path";
 
 const compat = new FlatCompat({ baseDirectory: path.resolve() });
 
-export default [
+const eslintConfig = [
   { ignores: ["node_modules/**", ".next/**", "coverage/**"] },
   js.configs.recommended,
   ...compat.config({
@@ -32,3 +32,5 @@ export default [
     ],
   }),
 ];
+
+export default eslintConfig;
