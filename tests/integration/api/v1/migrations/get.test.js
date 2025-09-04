@@ -23,15 +23,15 @@ test("GET to /api/v1/migrations should return 200", async () => {
 
   expect([201, 204]).toContain(response.status);
 
-  if (responseBody.data.length > 0) {
-    responseBody.data.forEach((item) => {
-      expect(item).toEqual(
-        expect.objectContaining({
-          path: expect.any(String),
-          name: expect.any(String),
-          timestamp: expect.any(Number),
-        }),
-      );
-    });
-  }
+  expect(responseBody.data.length).toBeGreaterThanOrEqual(0);
+
+  responseBody.data.forEach((item) => {
+    expect(item).toEqual(
+      expect.objectContaining({
+        path: expect.any(String),
+        name: expect.any(String),
+        timestamp: expect.any(Number),
+      }),
+    );
+  });
 });

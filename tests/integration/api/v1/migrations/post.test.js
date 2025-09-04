@@ -26,17 +26,17 @@ test("POST to /api/v1/migrations should return 200", async () => {
     }),
   );
 
-  if (response1Body.data.length > 0) {
-    response1Body.data.forEach((item) => {
-      expect(item).toEqual(
-        expect.objectContaining({
-          path: expect.any(String),
-          name: expect.any(String),
-          timestamp: expect.any(Number),
-        }),
-      );
-    });
-  }
+  expect(Array.isArray(response1Body.data)).toBe(true);
+
+  response1Body.data.forEach((item) => {
+    expect(item).toEqual(
+      expect.objectContaining({
+        path: expect.any(String),
+        name: expect.any(String),
+        timestamp: expect.any(Number),
+      }),
+    );
+  });
 
   await database.query("SELECT * FROM pgmigrations;");
   const migrationsInDatabase = await database.query(
