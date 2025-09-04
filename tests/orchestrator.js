@@ -11,11 +11,12 @@ async function waitForAllServices() {
 
     async function fetchStatusPage() {
       const response = await fetch("http://localhost:3000/api/v1/status");
-      const data = await response.json();
-      if (response.status !== 200) {
+      
+      if (!response.ok) {
         throw new Error("Service is not ready");
       }
-      return data;
+
+      return false;
     }
   }
 }
