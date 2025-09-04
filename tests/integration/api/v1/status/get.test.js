@@ -15,7 +15,7 @@ test("GET to /api/v1/status should return 200", async () => {
   expect(responseBody.updated_at).toEqual(parsedUpdatedAt);
 
   expect(responseBody.postgress_version).toBeDefined();
-  expect(responseBody.postgress_version).toMatch(/PostgreSQLite/);
+  expect(responseBody.postgress_version).toMatch(/PostgreSQL/);
   expect(typeof responseBody.postgress_version).toBe('string');
 
   expect(responseBody.max_connections).toBeDefined();
