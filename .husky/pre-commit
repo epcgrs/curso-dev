@@ -1,1 +1,8 @@
+
+HUSKY=0 ./.scripts/gitleaks protect --staged --config .gitleaks.toml --redact || {
+  echo "❌ Segredos suspeitos."
+  echo "🔒 Use './.scripts/gitleaks protect --staged --config .gitleaks.toml --redact' para verificar localmente."
+  exit 1
+}
+
 npx lint-staged

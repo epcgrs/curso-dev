@@ -18,6 +18,9 @@
     "build": "next build",
     "migration:create": "node-pg-migrate -m infra/migrations create",
     "migration:up": "node-pg-migrate -m infra/migrations --envPath .env.development up",
+    "secrets:scan": "./.scripts/gitleaks detect --config .gitleaks.toml --no-git --redact --source .",
+    "secrets:scan:git": "./.scripts/gitleaks detect --config .gitleaks.toml --redact --source .",
+    "secrets:scan:staged": "git diff --cached --name-only | xargs -r ./.scripts/gitleaks protect --staged --config .gitleaks.toml --redact",
     "wait-for-postgres": "node infra/scripts/wait-for-postgres.js",
     "prepare": "husky",
     "commit": "cz"
