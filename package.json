@@ -5,10 +5,11 @@
   "scripts": {
     "test": "npm run services:up && concurrently -n \"next,jest\" --hide next -k -s command-jest \"next dev\" \"jest --runInBand\"",
     "test:watch": "jest --watchAll --runInBand",
-    "dev": "npm run services:up && npm run wait-for-postgres && npm run migration:up && next dev",
+    "dev": "npm run services:up && npm run services:wait:database && npm run migration:up && next dev",
     "services:up": "docker compose -f infra/compose.yaml up -d",
     "services:stop": "docker compose -f infra/compose.yaml stop",
     "services:down": "docker compose -f infra/compose.yaml down",
+    "services:wait:database": "node infra/scripts/wait-for-postgres.js",
     "lint": "npm run lint:eslint:check && npm run lint:prettier:check",
     "lint:prettier:check": "prettier --check .",
     "lint:prettier:fix": "prettier --write .",
@@ -21,7 +22,6 @@
     "secrets:scan": "./.scripts/gitleaks detect --config .gitleaks.toml --no-git --redact --source .",
     "secrets:scan:git": "./.scripts/gitleaks detect --config .gitleaks.toml --redact --source .",
     "secrets:scan:staged": "git diff --cached --name-only | xargs -r ./.scripts/gitleaks protect --staged --config .gitleaks.toml --redact",
-    "wait-for-postgres": "node infra/scripts/wait-for-postgres.js",
     "prepare": "husky",
     "commit": "cz"
   },
